@@ -63,33 +63,6 @@ src/main/java/com/alura/
 - Maven (está incluido un wrapper `mvnw`)
 - Conexión a Internet para la API
 
-### Compilar
-
-**Windows (PowerShell)**:
-
-```powershell
-.\mvnw.cmd clean package
-```
-
-**Linux / Mac**:
-
-```bash
-./mvnw clean package
-```
-
-### Ejecutar
-
-**Desde la línea de comandos**:
-
-```powershell
-java -cp target/classes com.alura.ConversorApp
-```
-
-**Con Maven exec**:
-
-```powershell
-.\mvnw.cmd exec:java -Dexec.mainClass="com.alura.ConversorApp"
-```
 
 ---
 
@@ -163,13 +136,8 @@ Recomendación: mover la clave a variables de entorno o a `application.propertie
 ##  Referencias
 
 - ExchangeRate-API: https://www.exchangerate-api.com/
-- ISO 4217 (códigos de moneda): https://es.wikipedia.org/wiki/ISO_4217
 - Java HttpClient: https://docs.oracle.com/en/java/javase/21/docs/api/java.net.http/java/net/http/HttpClient.html
 
 ---
 
-##  Estado actual
-
-- Implementación: Conversor de Monedas funcional con arquitectura OOP básica.
-- Historial: Guardado en `conversion_history.json` mediante `FileWriter`.
 
