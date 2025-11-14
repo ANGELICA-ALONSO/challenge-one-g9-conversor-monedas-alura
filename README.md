@@ -4,6 +4,8 @@
 
 El **Conversor de Monedas** es una aplicación de consola desarrollada en **Java 21** que permite convertir valores entre diferentes monedas del mundo utilizando la API de **ExchangeRate-API**. La aplicación mantiene un historial de todas las conversiones realizadas y las exporta a un archivo JSON al finalizar.
 
+![alt text](image.png)
+
 ### Características Principales
 
 - Conversiones en tiempo real usando ExchangeRate-API
