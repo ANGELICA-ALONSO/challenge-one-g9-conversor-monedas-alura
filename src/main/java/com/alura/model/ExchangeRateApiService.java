@@ -1,12 +1,13 @@
 package com.alura.model;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ExchangeRateApiService implements ExchangeService {
 
@@ -15,6 +16,7 @@ public class ExchangeRateApiService implements ExchangeService {
     private static final String BASE_URL = "https://v6.exchangerate-api.com/v6/";
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final Gson gson = new Gson();
 
     @Override
     public double convert(String base, String target, double amount) throws IOException, InterruptedException {
@@ -27,16 +29,45 @@ public class ExchangeRateApiService implements ExchangeService {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         String body = response.body();
 
-        Pattern p = Pattern.compile("\"conversion_result\"\\s*:\\s*([-+]?[0-9]*\\.?[0-9]+(?:[eE][-+]?[0-9]+)?)");
-        Matcher m = p.matcher(body);
-        if (m.find()) {
-            try {
-                return Double.parseDouble(m.group(1));
-            } catch (NumberFormatException e) {
-                throw new IOException("No se pudo parsear conversion_result: " + e.getMessage());
-            }
+        // Parse response JSON using Gson into DTO
+        PairResponse pr;
+        try {
+            pr = gson.fromJson(body, PairResponse.class);
+        } catch (Exception e) {
+            throw new IOException("No se pudo parsear la respuesta JSON: " + e.getMessage() + "\nBody: " + body);
         }
 
-        throw new IOException("Campo conversion_result no encontrado. Respuesta: " + body);
+        if (pr == null) {
+            throw new IOException("Respuesta vacía de la API: " + body);
+        }
+
+        if (pr.result != null && pr.result.equalsIgnoreCase("error")) {
+            String err = pr.errorType != null ? pr.errorType : "error desconocido";
+            throw new IOException("API devolvió error: " + err + ". Mensaje: " + pr.message);
+        }
+
+        // conversion_result expected to be present
+        if (pr.conversionResult == null) {
+            throw new IOException("Campo conversion_result no encontrado en la respuesta: " + body);
+        }
+
+        return pr.conversionResult;
+    }
+
+    // DTO mapping fields from the ExchangeRate-API Pair response
+    private static class PairResponse {
+        public String result;
+        @SerializedName("base_code")
+        public String baseCode;
+        @SerializedName("target_code")
+        public String targetCode;
+        @SerializedName("conversion_rate")
+        public Double conversionRate;
+        @SerializedName("conversion_result")
+        public Double conversionResult;
+        // optional error fields
+        @SerializedName("error-type")
+        public String errorType;
+        public String message;
     }
 }

@@ -1,5 +1,8 @@
 package com.alura.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,13 +20,9 @@ public class HistoryManager {
     }
 
     public void saveToFile(String path) throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter fw = new FileWriter(path)) {
-            fw.write("[");
-            for (int i = 0; i < entries.size(); i++) {
-                fw.write(entries.get(i).toJson());
-                if (i < entries.size() - 1) fw.write(",\n");
-            }
-            fw.write("]");
+            gson.toJson(entries, fw);
             fw.flush();
         }
     }

@@ -86,23 +86,6 @@ Ingrese monto a convertir: 1000
 ✓ Historial guardado exitosamente en: conversion_history.json
 ```
 
----
-
-##  Formato de `conversion_history.json`
-
-El archivo generado contiene un array JSON de entradas con la forma:
-
-```json
-[
-  {
-    "base": "ARS",
-    "target": "USD",
-    "amount": 1000.0,
-    "result": 5.1234,
-    "timestamp": "2025-11-14T15:30:45.123"
-  }
-]
-```
 
 ---
 
@@ -124,6 +107,38 @@ Recomendación: mover la clave a variables de entorno o a `application.propertie
 - `ExchangeService` es una interfaz: puedes añadir otras implementaciones (mock para tests, otro proveedor, etc.).
 - `ConversionController` recibe dependencias por constructor, lo que facilita pruebas unitarias.
 - `HistoryManager` usa `FileWriter` para cumplir el requisito; podrías cambiar a una biblioteca de JSON para serialización más robusta.
+
+---
+
+##  Actualización: Parsing de la respuesta de la API con Gson
+
+Se actualizó la forma de obtener el resultado de la API: en lugar de usar expresiones regulares, ahora se usa `Gson` para deserializar la respuesta JSON en un DTO (clase `PairResponse`). Esto es más robusto y menos propenso a errores frente a cambios en el formato de la API.
+
+
+Ventajas de usar Gson para el parsing:
+- Serialización/deserialización directa entre JSON y objetos Java.
+- Evita errores de parsing y problemas con escapes o formatos numéricos.
+- Facilita la extensión del DTO si la API agrega campos.
+
+---
+
+##  Serialización del historial con Gson
+
+El `HistoryManager` ahora usa `Gson` para serializar la lista de `HistoryEntry` a un JSON con formato legible (pretty printing). Esto reemplaza la generación manual de JSON y garantiza un manejo correcto de tipos y escapes.
+
+---
+
+##  Dependencia Maven (Gson)
+
+La dependencia de `Gson` fue añadida en el `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>com.google.code.gson</groupId>
+  <artifactId>gson</artifactId>
+  <version>2.10.1</version>
+</dependency>
+```
 
 ---
 

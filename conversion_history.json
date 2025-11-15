@@ -1,3 +1,23 @@
-[{"base":"PHP","target":"MXN","amount":500.0,"result":155.25,"timestamp":"2025-11-14T16:33:47.2545747"},
-{"base":"CLP","target":"BRL","amount":500.0,"result":2.8435,"timestamp":"2025-11-14T16:34:41.4822421"},
-{"base":"USD","target":"MXN","amount":500.0,"result":9149.45,"timestamp":"2025-11-14T16:35:16.2148376"}]
+[
+  {
+    "base": "ARS",
+    "target": "MXN",
+    "amount": 500.0,
+    "result": 6.52,
+    "timestamp": "2025-11-14T21:50:37.1276007"
+  },
+  {
+    "base": "USD",
+    "target": "BRL",
+    "amount": 500.0,
+    "result": 2648.6,
+    "timestamp": "2025-11-14T21:50:47.2352585"
+  },
+  {
+    "base": "PHP",
+    "target": "USD",
+    "amount": 500.0,
+    "result": 8.465,
+    "timestamp": "2025-11-14T21:50:59.3054673"
+  }
+]
